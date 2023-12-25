@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.UsersSexMapper">
+
+    <select id="listAll" resultType="org.glxy.sass.entity.VO.UsersSex">
+        SELECT * ,
+        case
+        when(users_sex=0)
+        then '男'
+        when(users_sex=1)
+        then '女'
+        else 'X'
+        end as "sex"
+        FROM `users`
+    </select>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.UsersNumMapper">
+
+    <select id="selectSex" resultType="org.glxy.sass.entity.VO.UsersNum">
+        select
+            count(users_stnumber) as "num",
+            count(
+                case
+                when users_sex='0' then 1
+                else null
+                end
+                ) as 'boy',
+            count(
+                case
+                when users_sex='1'
+                then 1
+                else null
+	            end
+                ) as 'girl'
+                from enroll
+    </select>
+
+</mapper>

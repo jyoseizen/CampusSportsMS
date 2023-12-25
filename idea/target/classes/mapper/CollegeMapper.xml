@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.CollegeMapper">
+
+    <delete id="deleteCollege" parameterType="org.glxy.sass.entity.College">
+        delete from college where college_name = #{collegeName}
+    </delete>
+
+    <!--    查询学院名字（动态字典）-->
+    <select id="selectCollegeName" resultType="java.util.Map">
+        SELECT college_name
+        FROM `college`
+    </select>
+
+    <!--    以学院名查询用户-->
+    <select id="selectUsersCollegeName" parameterType="java.util.List">
+        SELECT users_stnumber FROM users
+        where college_name = #{collegeName}
+    </select>
+
+</mapper>
