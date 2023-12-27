@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.EchartsMapper">
+
+<!--    统计各学院报名人数-->
+    <select id="getListEcharts" resultType="org.glxy.sass.entity.Echarts">
+            select college_name,
+                count(*) as num
+                from enroll
+                GROUP BY college_name
+    </select>
+
+</mapper>

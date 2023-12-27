@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.ApplicationformMapper">
+
+    <!--    <delete id="delete" parameterType="org.glxy.sass.entity.College">-->
+    <!--        delete from college where college_number = #{collegeNumber}-->
+    <!--    </delete>-->
+
+
+    <!--    用户报名列表增加-->
+    <insert id="addA" parameterType="org.glxy.sass.entity.Applicationform">
+        INSERT INTO applicationform(users_stnumber,competition_nb)
+        VALUES (#{usersStnumber},#{competitionNb})
+    </insert>
+
+    <delete id="deleteUser" parameterType="org.glxy.sass.entity.Applicationform">
+        delete from applicationform
+        where users_stnumber = #{usersStnumber} and competition_nb = #{competitionNb}
+    </delete>
+
+    <!--    根据学号删除报名表-->
+    <delete id="deleteAppUsersStnumber" parameterType="org.glxy.sass.entity.Applicationform">
+        DELETE FROM applicationform
+        WHERE users_stnumber = #{usersStnumber}
+    </delete>
+
+    <!--    根据比赛编号删除报名表-->
+    <delete id="deleteAppCompetitionNb" parameterType="org.glxy.sass.entity.Applicationform">
+        DELETE FROM applicationform
+        WHERE competition_nb = #{competitionNb}
+    </delete>
+
+    <!--    用户报名列表查重-->
+    <select id="selectFrom" resultType="org.glxy.sass.entity.Applicationform">
+
+        SELECT users_stnumber,competition_nb FROM applicationform
+        WHERE users_stnumber = #{usersStnumber}  and competition_nb = #{competitionNb}
+    </select>
+</mapper>

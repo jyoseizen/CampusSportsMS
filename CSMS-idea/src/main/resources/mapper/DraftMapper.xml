@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.DraftMapper">
+
+
+    <resultMap id="draftMap" type="org.glxy.sass.entity.Draft">
+        <id column="draft_id" property="draftId"/>
+        <result column="users_stnumber" property="usersStnumber"/>
+        <result column="users_name" property="usersName"/>
+        <result column="college_name" property="collegeName"/>
+        <result column="draft_state" property="draftState"/>
+        <result column="draft_content" property="draftContent"/>
+        <collection property="usersList" ofType="org.glxy.sass.entity.Users" javaType="Arraylist">
+            <id column="users_stnumber" property="usersStnumber"/>
+            <result column="users_url" property="usersUrl"/>
+        </collection>
+    </resultMap>
+
+    <!--    根据学号删除加油稿-->
+    <delete id="deleteUsersStnumber" parameterType="org.glxy.sass.entity.Draft">
+        DELETE FROM draft
+        WHERE users_stnumber = #{usersStnumber}
+    </delete>
+    <!--    <resultMap id="userMap" type="org.glxy.sass.entity.Users">-->
+    <!--        <id column="users_stnumber" property="usersStnumber"></id>-->
+    <!--        <result column="users_url" property="usersUrl"></result>-->
+    <!--    </resultMap>-->
+
+    <select id="selectImgUrl" resultMap="draftMap">
+--       select `draft`.*,users.users_url
+--       from `draft`
+--       inner join users on draft.users_stnumber = users.users_stnumber where `draft`.draft_state = 1
+         SELECT
+                 draft.draft_id,
+                 draft.users_name,
+                 draft.college_name,
+                 draft.users_stnumber,
+                 users.users_url,
+                 draft.draft_content FROM draft
+                 LEFT JOIN users ON users.users_stnumber = draft.users_stnumber WHERE draft_state = 1
+    </select>
+
+
+    <update id="updateState" parameterType="org.glxy.sass.entity.Draft">
+        update draft
+        SET draft_state= #{draftState}
+        WHERE draft_id = #{draftId}
+    </update>
+
+
+    <!--    <delete id="delete" parameterType="org.glxy.sass.entity.Draft">-->
+    <!--        delete from college where college_number = #{collegeNumber}-->
+    <!--    </delete>-->
+
+    <!--    根据条件模糊查询-->
+    <select id="selectBySm" resultType="org.glxy.sass.entity.Draft">
+        select * from draft
+        <where>
+
+            <if test="usersName != null and usersName != '' ">
+                AND users_name LIKE CONCAT('%','${usersName}','%')
+            </if>
+
+            <if test="usersStnumber != null and usersStnumber != '' ">
+                AND users_stnumber LIKE CONCAT('%','${usersStnumber}','%')
+            </if>
+
+            <if test="collegeName != null and collegeName != '' ">
+                AND college_name LIKE CONCAT('%','${collegeName}','%')
+            </if>
+
+        </where>
+    </select>
+
+
+</mapper>

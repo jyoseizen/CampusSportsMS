@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.UsersMapper">
+
+    <resultMap id="usersMap" type="org.glxy.sass.entity.Users">
+        <id property="usersStnumber" column="users_stnumber"/>
+        <result property="usersPwd" column="users_pwd"/>
+        <result property="usersName" column="users_name"/>
+        <result property="usersPhone" column="users_phone"/>
+        <result property="usersSex" column="users_sex"/>
+        <!--        <result property="competitionNb" column="competition_nb"/>-->
+        <result property="collegeName" column="college_name"/>
+        <result property="usersUrl" column="users_url"/>
+
+    </resultMap>
+
+    <insert id="add" parameterType="org.glxy.sass.entity.Users">
+        insert into
+        users(users_stnumber,users_name,users_sex,users_phone,users_pwd,college_name,users_url)
+        values
+        (#{usersStnumber},#{usersName},#{usersSex},#{usersPhone},#{usersPwd},#{collegeName},#{usersUrl})
+    </insert>
+
+    <!--    用户上传头像-->
+    <update id="updateUrl" parameterType="org.glxy.sass.entity.Users">
+        update users SET
+          users_url= #{usersUrl}
+           WHERE
+            users_stnumber = #{usersStnumber}
+    </update>
+
+    <!--    用户修改个人信息-->
+    <update id="updateUsersPwd" parameterType="org.glxy.sass.entity.Users">
+          update users SET
+          users_phone= #{usersPhone},users_pwd= #{usersPwd}, users_email= #{usersEmail}
+           WHERE
+            users_stnumber = #{usersStnumber}
+    </update>
+
+    <!--    修改密码(重置密码)-->
+    <update id="updatePwd" parameterType="org.glxy.sass.entity.Users">
+        UPDATE users SET users_pwd = #{usersPwd}
+        WHERE users_stnumber = #{usersStnumber}
+    </update>
+
+    <!--    导出所有用户信息-->
+    <select id="listAll" resultType="org.glxy.sass.entity.Users">
+        select users_stnumber,
+        users_name,
+        users_sex,
+        users_phone,
+--         competition_nb,
+        college_name from users
+    </select>
+
+    <!--根据学号名字模糊查询-->
+    <select id="selectBySn" resultType="org.glxy.sass.entity.Users">
+        select * from users
+        <where>
+
+            <if test="usersName != null and usersName != '' ">
+                AND users_name LIKE CONCAT('%','${usersName}','%')
+            </if>
+
+            <if test="usersStnumber != null and usersStnumber != '' ">
+                AND users_stnumber LIKE CONCAT('%','${usersStnumber}','%')
+            </if>
+
+            <if test="collegeName != null and collegeName != '' ">
+                AND college_name LIKE CONCAT('%','${collegeName}','%')
+            </if>
+
+        </where>
+    </select>
+
+    <delete id="delete" parameterType="org.glxy.sass.entity.Users">
+        delete from users where users_stnumber = #{usersStnumber}
+    </delete>
+
+    <!--    &lt;!&ndash;    批量删除&ndash;&gt;-->
+    <!--    <delete id="deleteIds" parameterType="String">-->
+
+    <!--    </delete>-->
+
+    <!--    统计男女人数-->
+    <select id="selectSex" resultType="org.glxy.sass.entity.Users">
+        select
+            count(users_stnumber) as "usersSexsum",
+            count(
+                case
+                when users_sex='0' then 1
+                else null
+                end
+                ) as 'usersSexboy',
+            count(
+                case
+                when users_sex='1'
+                then 1
+                else null
+	            end
+                ) as 'usersSexgirl'
+                from users
+    </select>
+
+    <!--    登陆-->
+    <select id="loginSelect" resultType="org.glxy.sass.entity.Users">
+        SELECT users_stnumber,users_name,users_pwd,users_sex,users_phone,college_name FROM users
+        WHERE
+        users_stnumber = #{usersStnumber} and users_pwd = #{usersPwd}
+    </select>
+
+    <!--    查询用户性别-->
+    <select id="selectByUsersSex" resultType="integer">
+        select users_sex from users
+        where users_stnumber = #{usersStnumber}
+    </select>
+
+    <!--    查询用户头像-->
+    <select id="selectByUsersUrl" resultType="java.lang.String">
+        select users_url from users
+        where users_stnumber = #{usersStnumber}
+    </select>
+
+    <!--    以学院名查询用户-->
+    <select id="selectUsersCollege" resultType="org.glxy.sass.entity.Users">
+        SELECT users_stnumber FROM users
+        where college_name = #{collegeName}
+    </select>
+
+    <!--    查询用户邮箱是否对应-->
+    <select id="selectUsersEmail" resultType="org.glxy.sass.entity.Users">
+        SELECT users_email FROM users
+        WHERE users_stnumber = #{usersStnumber} and users_email = #{usersEmail}
+    </select>
+
+</mapper>

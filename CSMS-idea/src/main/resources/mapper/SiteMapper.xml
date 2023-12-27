@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.glxy.sass.mapper.SiteMapper">
+
+    <!--  查询比赛地点（动态字典）-->
+    <select id="selectCompetitionSite" resultType="java.util.Map">
+        SELECT competition_site
+        FROM `site`
+    </select>
+
+    <!--    查询学院名称-->
+    <select id="selectByCompetitionSite" resultType="java.lang.String">
+        SELECT competition_site FROM site
+        WHERE site_id = #{siteId}
+    </select>
+</mapper>
